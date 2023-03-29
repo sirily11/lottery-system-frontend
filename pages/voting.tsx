@@ -6,7 +6,18 @@ import abi from "../src/Voting.json";
 import { ethers } from "ethers";
 
 import dayjs from "dayjs";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import {
+  AppBar,
+  Button,
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 
 interface CandidateResult {
   name: string;
@@ -138,10 +149,14 @@ export default function Home() {
 
   return (
     <div style={{ padding: 20 }}>
-      <Typography variant="h3">Simple Voting System</Typography>
+      <AppBar>
+        <Toolbar>
+          <Typography variant="h6">Voting</Typography>
+        </Toolbar>
+      </AppBar>
       {loading && <CircularProgress />}
       {/* Connect to metamask button */}
-      <div>
+      <div style={{ marginTop: 62 }}>
         <Typography variant="caption" style={{ paddingRight: 10 }}>
           Address:{" "}
         </Typography>
@@ -159,30 +174,32 @@ export default function Home() {
       </div>
 
       {/** Table for all candidates */}
-      <table style={{ marginTop: 20 }}>
-        <thead>
-          <tr>
-            <th>Candidate Name</th>
-            <th>Candidate Address</th>
-            <th>Vote Count</th>
-            <th>Vote</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table style={{ marginTop: 20 }}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Candidate Name</TableCell>
+            <TableCell>Candidate Address</TableCell>
+            <TableCell>Vote Count</TableCell>
+            <TableCell>Vote</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {candidateResults.map((candidateResult, index) => (
-            <tr key={candidateResult.candidateAddress}>
-              <td>{candidateResult.name}</td>
-              <td>{candidateResult.candidateAddress}</td>
-              <td>{ethers.utils.formatUnits(candidateResult.voteCount, 0)}</td>
-              <td>
+            <TableRow key={candidateResult.candidateAddress}>
+              <TableCell>{candidateResult.name}</TableCell>
+              <TableCell>{candidateResult.candidateAddress}</TableCell>
+              <TableCell>
+                {ethers.utils.formatUnits(candidateResult.voteCount, 0)}
+              </TableCell>
+              <TableCell>
                 <button disabled={!address} onClick={() => vote(index)}>
                   Vote
                 </button>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       <div style={{ marginTop: 20 }}>
         <Button disabled={!address} onClick={registerAsCandidate}>
           Register as a candidate
